@@ -9,5 +9,6 @@
         public string Email { get; set; }
         public int PhoneNumber { get; set; }
         public int LicenseNumber { get; set; }
+        public ICollection <Booking> Bookings { get; set; } 
     }
 }

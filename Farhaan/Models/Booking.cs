@@ -1,4 +1,6 @@
-﻿namespace Farhaan.Models
+﻿using Farhaan.Controllers;
+
+namespace Farhaan.Models
 {
     public class Booking
     {
@@ -9,5 +11,10 @@
         public int Time { get; set; }
         public string Location { get; set; }
         public int TotalPrice { get; set; }
+
+        public User User { get; set; }
+        public Car Car { get; set; }
+     
+          
     }
 }
