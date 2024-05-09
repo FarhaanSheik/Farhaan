@@ -17,6 +17,7 @@ namespace Farhaan.Models
         public int PhoneNumber { get; set; }
         [RegularExpression(@"^\+?\d{1,3}[- ]?\(?\d{3}\)?[- ]?\d{3}[- ]?\d{4}$", ErrorMessage = "Invalid phone number format")]
         public int LicenseNumber { get; set; }
+        [MaxLength(50)]
         public ICollection <Booking> Bookings { get; set; } 
     }
 }

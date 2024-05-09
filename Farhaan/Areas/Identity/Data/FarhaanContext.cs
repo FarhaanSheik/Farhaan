@@ -25,4 +25,6 @@ public DbSet<Farhaan.Models.User> User { get; set; } = default!;
 public DbSet<Farhaan.Models.Booking> Booking { get; set; } = default!;
 
 public DbSet<Farhaan.Models.Car> Car { get; set; } = default!;
+
+   
 }
