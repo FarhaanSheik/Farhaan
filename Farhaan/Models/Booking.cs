@@ -20,6 +20,6 @@ namespace Farhaan.Models
         public User User { get; set; }
         public Car Car { get; set; }
      
-          
+       
     }
 }
