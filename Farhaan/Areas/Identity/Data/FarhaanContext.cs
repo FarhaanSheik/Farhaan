@@ -29,14 +29,11 @@ public DbSet<Farhaan.Models.Car> Car { get; set; } = default!;
 
    
 }
+
+
+
     
-   
-
-
-    
 
 
 
-          
-
-
+       
