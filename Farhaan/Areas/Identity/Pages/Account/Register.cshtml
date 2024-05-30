@@ -13,6 +13,32 @@
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="form-floating mb-3">
+                <input asp-for="Input.UserName" class="form-control" autocomplete="new-UserName" aria-required="true" placeholder="UserName" />
+                <label asp-for="Input.UserName">User Name</label>
+                <span asp-validation-for="Input.UserName" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.FirstName" class="form-control" autocomplete="new-FirstName" aria-required="true" placeholder="FirstName" />
+                <label asp-for="Input.FirstName">Fisrt Name</label>
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.LastName" class="form-control" autocomplete="new-LastName" aria-required="true" placeholder="LastName" />
+                <label asp-for="Input.LastName">Last Name</label>
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.PhoneNumber" class="form-control" autocomplete="new-PhoneNumber" aria-required="true" placeholder="PhoneNumber" />
+                <label asp-for="Input.PhoneNumber">Phone Number</label>
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.LicenseNumber" class="form-control" autocomplete="new-LicenseNumber" aria-required="true" placeholder="LicenseNumber" />
+                <label asp-for="Input.LicenseNumber">License Number</label>
+                <span asp-validation-for="Input.LicenseNumber" class="text-danger"></span>
+            </div>
+            
+            <div class="form-floating mb-3">
                 <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
                 <label asp-for="Input.Email">Email</label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
@@ -63,5 +89,9 @@
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    
+         <partial name="_ValidationScriptsPartial" />
+
+    
+    
 }

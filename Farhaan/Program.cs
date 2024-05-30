@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Farhaan.Areas.Identity.Data;
+using Farhaan.Models;
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("FarhaanContextConnection") ?? throw new InvalidOperationException("Connection string 'FarhaanContextConnection' not found.");
 
 builder.Services.AddDbContext<FarhaanContext>(options => options.UseSqlServer(connectionString));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<FarhaanContext>();
+builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<FarhaanContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
