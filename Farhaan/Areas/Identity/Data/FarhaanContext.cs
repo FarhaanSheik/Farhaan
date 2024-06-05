@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Farhaan.Models;
 
 namespace Farhaan.Areas.Identity.Data;
 
@@ -18,4 +19,8 @@ public class FarhaanContext : IdentityDbContext<appUser>
         // For example, you can rename the ASP.NET Identity table names and more.
         // Add your customizations after calling base.OnModelCreating(builder);
     }
+
+public DbSet<Farhaan.Models.Booking> Booking { get; set; } = default!;
+
+public DbSet<Farhaan.Models.Car> Car { get; set; } = default!;
 }
