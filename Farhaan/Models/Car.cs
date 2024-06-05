@@ -12,8 +12,7 @@ namespace Farhaan.Models
 
 
         public ICollection<Booking> Bookings { get; set; }
-        public IdentityUser UserID { get; set; }
-        public User User { get; set; }    
+       
 
        
         }
