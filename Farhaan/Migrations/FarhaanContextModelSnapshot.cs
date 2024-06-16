@@ -34,6 +34,11 @@ namespace Farhaan.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -99,6 +104,10 @@ namespace Farhaan.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("appUser");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Farhaan.Models.Booking", b =>
@@ -111,6 +120,13 @@ namespace Farhaan.Migrations
 
                     b.Property<int>("CarID")
                         .HasColumnType("int");
+
+                    b.Property<string>("CustomerIDId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CustomerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -125,19 +141,11 @@ namespace Farhaan.Migrations
                     b.Property<int>("TotalPrice")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserIDId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("appUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("BookingID");
 
-                    b.HasIndex("CarID");
+                    b.HasIndex("CustomerIDId");
 
-                    b.HasIndex("UserIDId");
-
-                    b.HasIndex("appUserId");
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Booking");
                 });
@@ -150,6 +158,9 @@ namespace Farhaan.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CarID"));
 
+                    b.Property<int>("BookingID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Brand")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -161,6 +172,8 @@ namespace Farhaan.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("CarID");
+
+                    b.HasIndex("BookingID");
 
                     b.ToTable("Car");
                 });
@@ -302,27 +315,39 @@ namespace Farhaan.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Farhaan.Models.Customer", b =>
+                {
+                    b.HasBaseType("Farhaan.Areas.Identity.Data.appUser");
+
+                    b.HasDiscriminator().HasValue("Customer");
+                });
+
             modelBuilder.Entity("Farhaan.Models.Booking", b =>
                 {
-                    b.HasOne("Farhaan.Models.Car", "Car")
+                    b.HasOne("Farhaan.Areas.Identity.Data.appUser", "CustomerID")
+                        .WithMany()
+                        .HasForeignKey("CustomerIDId");
+
+                    b.HasOne("Farhaan.Models.Customer", "Customer")
                         .WithMany("Bookings")
-                        .HasForeignKey("CarID")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Farhaan.Areas.Identity.Data.appUser", "UserID")
-                        .WithMany()
-                        .HasForeignKey("UserIDId");
+                    b.Navigation("Customer");
 
-                    b.HasOne("Farhaan.Areas.Identity.Data.appUser", "appUser")
-                        .WithMany()
-                        .HasForeignKey("appUserId");
+                    b.Navigation("CustomerID");
+                });
 
-                    b.Navigation("Car");
+            modelBuilder.Entity("Farhaan.Models.Car", b =>
+                {
+                    b.HasOne("Farhaan.Models.Booking", "Booking")
+                        .WithMany("Cars")
+                        .HasForeignKey("BookingID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("UserID");
-
-                    b.Navigation("appUser");
+                    b.Navigation("Booking");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -376,7 +401,12 @@ namespace Farhaan.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Farhaan.Models.Car", b =>
+            modelBuilder.Entity("Farhaan.Models.Booking", b =>
+                {
+                    b.Navigation("Cars");
+                });
+
+            modelBuilder.Entity("Farhaan.Models.Customer", b =>
                 {
                     b.Navigation("Bookings");
                 });

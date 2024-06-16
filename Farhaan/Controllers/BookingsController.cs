@@ -22,8 +22,7 @@ namespace Farhaan.Controllers
         // GET: Bookings
         public async Task<IActionResult> Index()
         {
-            var farhaanContext = _context.Booking.Include(b => b.Car);
-            return View(await farhaanContext.ToListAsync());
+            return View(await _context.Booking.ToListAsync());
         }
 
         // GET: Bookings/Details/5
@@ -35,7 +34,6 @@ namespace Farhaan.Controllers
             }
 
             var booking = await _context.Booking
-                .Include(b => b.Car)
                 .FirstOrDefaultAsync(m => m.BookingID == id);
             if (booking == null)
             {
@@ -48,7 +46,6 @@ namespace Farhaan.Controllers
         // GET: Bookings/Create
         public IActionResult Create()
         {
-            ViewData["CarID"] = new SelectList(_context.Set<Car>(), "CarID", "CarID");
             return View();
         }
 
@@ -65,7 +62,6 @@ namespace Farhaan.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CarID"] = new SelectList(_context.Set<Car>(), "CarID", "CarID", booking.CarID);
             return View(booking);
         }
 
@@ -82,7 +78,6 @@ namespace Farhaan.Controllers
             {
                 return NotFound();
             }
-            ViewData["CarID"] = new SelectList(_context.Set<Car>(), "CarID", "CarID", booking.CarID);
             return View(booking);
         }
 
@@ -118,7 +113,6 @@ namespace Farhaan.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CarID"] = new SelectList(_context.Set<Car>(), "CarID", "CarID", booking.CarID);
             return View(booking);
         }
 
@@ -131,7 +125,6 @@ namespace Farhaan.Controllers
             }
 
             var booking = await _context.Booking
-                .Include(b => b.Car)
                 .FirstOrDefaultAsync(m => m.BookingID == id);
             if (booking == null)
             {

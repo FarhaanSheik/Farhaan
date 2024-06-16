@@ -8,7 +8,7 @@ namespace Farhaan.Models
     public class Booking
     {
         public int BookingID { get; set; }
-        public appUser UserID { get; set; }
+        public appUser CustomerID { get; set; }
         public int CarID { get; set; }
         [Required]
         [DataType(DataType.Date)]
@@ -18,9 +18,8 @@ namespace Farhaan.Models
         public DateTime Time { get; set; }
         public string Location { get; set; }
         public int TotalPrice { get; set; }
-        public Car Car { get; set; }
-        public appUser appUser { get; set; }
-     
+        public Customer Customer { get; set; }   
        
+        public ICollection<Car> Cars { get; set; }
     }
 }
