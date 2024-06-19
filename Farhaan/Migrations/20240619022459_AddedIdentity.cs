@@ -34,7 +34,6 @@ namespace Farhaan.Migrations
                     LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LicenseNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Discriminator = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -52,6 +51,21 @@ namespace Farhaan.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Car",
+                columns: table => new
+                {
+                    CarID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Brand = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Year = table.Column<int>(type: "int", nullable: false),
+                    PricePerDay = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Car", x => x.CarID);
                 });
 
             migrationBuilder.CreateTable(
@@ -166,49 +180,27 @@ namespace Farhaan.Migrations
                 {
                     BookingID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CustomerIDId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    appUserID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CarID = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Time = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TotalPrice = table.Column<int>(type: "int", nullable: false),
-                    CustomerId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    TotalPrice = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Booking", x => x.BookingID);
                     table.ForeignKey(
-                        name: "FK_Booking_AspNetUsers_CustomerIDId",
-                        column: x => x.CustomerIDId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Booking_AspNetUsers_CustomerId",
-                        column: x => x.CustomerId,
+                        name: "FK_Booking_AspNetUsers_appUserID",
+                        column: x => x.appUserID,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Car",
-                columns: table => new
-                {
-                    CarID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Brand = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BookingID = table.Column<int>(type: "int", nullable: false),
-                    Year = table.Column<int>(type: "int", nullable: false),
-                    PricePerDay = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Car", x => x.CarID);
                     table.ForeignKey(
-                        name: "FK_Car_Booking_BookingID",
-                        column: x => x.BookingID,
-                        principalTable: "Booking",
-                        principalColumn: "BookingID",
+                        name: "FK_Booking_Car_CarID",
+                        column: x => x.CarID,
+                        principalTable: "Car",
+                        principalColumn: "CarID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -252,19 +244,14 @@ namespace Farhaan.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Booking_CustomerId",
+                name: "IX_Booking_appUserID",
                 table: "Booking",
-                column: "CustomerId");
+                column: "appUserID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Booking_CustomerIDId",
+                name: "IX_Booking_CarID",
                 table: "Booking",
-                column: "CustomerIDId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Car_BookingID",
-                table: "Car",
-                column: "BookingID");
+                column: "CarID");
         }
 
         /// <inheritdoc />
@@ -286,16 +273,16 @@ namespace Farhaan.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Car");
+                name: "Booking");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Booking");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Car");
         }
     }
 }

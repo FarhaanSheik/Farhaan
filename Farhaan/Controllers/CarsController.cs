@@ -22,8 +22,7 @@ namespace Farhaan.Controllers
         // GET: Cars
         public async Task<IActionResult> Index()
         {
-            var farhaanContext = _context.Car.Include(c => c.Booking);
-            return View(await farhaanContext.ToListAsync());
+            return View(await _context.Car.ToListAsync());
         }
 
         // GET: Cars/Details/5
@@ -35,7 +34,6 @@ namespace Farhaan.Controllers
             }
 
             var car = await _context.Car
-                .Include(c => c.Booking)
                 .FirstOrDefaultAsync(m => m.CarID == id);
             if (car == null)
             {
@@ -48,7 +46,6 @@ namespace Farhaan.Controllers
         // GET: Cars/Create
         public IActionResult Create()
         {
-            ViewData["BookingID"] = new SelectList(_context.Booking, "BookingID", "BookingID");
             return View();
         }
 
@@ -57,7 +54,7 @@ namespace Farhaan.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CarID,Brand,BookingID,Year,PricePerDay")] Car car)
+        public async Task<IActionResult> Create([Bind("CarID,Brand,Year,PricePerDay")] Car car)
         {
             if (!ModelState.IsValid)
             {
@@ -65,7 +62,6 @@ namespace Farhaan.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BookingID"] = new SelectList(_context.Booking, "BookingID", "BookingID", car.BookingID);
             return View(car);
         }
 
@@ -82,7 +78,6 @@ namespace Farhaan.Controllers
             {
                 return NotFound();
             }
-            ViewData["BookingID"] = new SelectList(_context.Booking, "BookingID", "BookingID", car.BookingID);
             return View(car);
         }
 
@@ -91,7 +86,7 @@ namespace Farhaan.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CarID,Brand,BookingID,Year,PricePerDay")] Car car)
+        public async Task<IActionResult> Edit(int id, [Bind("CarID,Brand,Year,PricePerDay")] Car car)
         {
             if (id != car.CarID)
             {
@@ -118,7 +113,6 @@ namespace Farhaan.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BookingID"] = new SelectList(_context.Booking, "BookingID", "BookingID", car.BookingID);
             return View(car);
         }
 
@@ -131,7 +125,6 @@ namespace Farhaan.Controllers
             }
 
             var car = await _context.Car
-                .Include(c => c.Booking)
                 .FirstOrDefaultAsync(m => m.CarID == id);
             if (car == null)
             {

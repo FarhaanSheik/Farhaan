@@ -22,7 +22,8 @@ namespace Farhaan.Controllers
         // GET: Bookings
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Booking.ToListAsync());
+            var farhaanContext = _context.Booking.Include(b => b.Car).Include(b => b.appUser);
+            return View(await farhaanContext.ToListAsync());
         }
 
         // GET: Bookings/Details/5
@@ -34,6 +35,8 @@ namespace Farhaan.Controllers
             }
 
             var booking = await _context.Booking
+                .Include(b => b.Car)
+                .Include(b => b.appUser)
                 .FirstOrDefaultAsync(m => m.BookingID == id);
             if (booking == null)
             {
@@ -46,6 +49,8 @@ namespace Farhaan.Controllers
         // GET: Bookings/Create
         public IActionResult Create()
         {
+            ViewData["CarID"] = new SelectList(_context.Car, "CarID", "Brand");
+            ViewData["appUserID"] = new SelectList(_context.Users, "Id", "FirstName");
             return View();
         }
 
@@ -54,7 +59,7 @@ namespace Farhaan.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BookingID,CarID,Date,Time,Location,TotalPrice")] Booking booking)
+        public async Task<IActionResult> Create([Bind("BookingID,appUserID,CarID,Date,Time,Location,TotalPrice")] Booking booking)
         {
             if (!ModelState.IsValid)
             {
@@ -62,6 +67,8 @@ namespace Farhaan.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CarID"] = new SelectList(_context.Car, "CarID", "CarID", booking.Car.Brand);
+            ViewData["appUserID"] = new SelectList(_context.Users, "Id", "Id", booking.appUser.FirstName);
             return View(booking);
         }
 
@@ -78,6 +85,8 @@ namespace Farhaan.Controllers
             {
                 return NotFound();
             }
+            ViewData["CarID"] = new SelectList(_context.Car, "CarID", "CarID", booking.CarID);
+            ViewData["appUserID"] = new SelectList(_context.Users, "Id", "Id", booking.appUserID);
             return View(booking);
         }
 
@@ -86,14 +95,14 @@ namespace Farhaan.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BookingID,CarID,Date,Time,Location,TotalPrice")] Booking booking)
+        public async Task<IActionResult> Edit(int id, [Bind("BookingID,appUserID,CarID,Date,Time,Location,TotalPrice")] Booking booking)
         {
             if (id != booking.BookingID)
             {
                 return NotFound();
             }
 
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
@@ -113,6 +122,8 @@ namespace Farhaan.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CarID"] = new SelectList(_context.Car, "CarID", "CarID", booking.CarID);
+            ViewData["appUserID"] = new SelectList(_context.Users, "Id", "Id", booking.appUserID);
             return View(booking);
         }
 
@@ -125,6 +136,8 @@ namespace Farhaan.Controllers
             }
 
             var booking = await _context.Booking
+                .Include(b => b.Car)
+                .Include(b => b.appUser)
                 .FirstOrDefaultAsync(m => m.BookingID == id);
             if (booking == null)
             {

@@ -2,13 +2,16 @@
 using Farhaan.Controllers;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Farhaan.Models
 {
     public class Booking
     {
         public int BookingID { get; set; }
-        public appUser CustomerID { get; set; }
+
+        [ForeignKey("appUser")]
+        public string appUserID { get; set; }
         public int CarID { get; set; }
         [Required]
         [DataType(DataType.Date)]
@@ -18,8 +21,9 @@ namespace Farhaan.Models
         public DateTime Time { get; set; }
         public string Location { get; set; }
         public int TotalPrice { get; set; }
-        public Customer Customer { get; set; }   
-       
-        public ICollection<Car> Cars { get; set; }
+        public appUser appUser { get; set; }   
+
+        public Car Car { get; set; } 
+
     }
 }

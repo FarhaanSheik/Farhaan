@@ -13,6 +13,8 @@ namespace Farhaan.Areas.Identity.Data
         public string PhoneNumber { get; set; }
         public string LicenseNumber { get; set; }
 
-              
+        public ICollection<Booking> Bookings { get; set; }
+
+
     }
 }
