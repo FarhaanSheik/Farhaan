@@ -85,8 +85,8 @@ namespace Farhaan.Controllers
             {
                 return NotFound();
             }
-            ViewData["CarID"] = new SelectList(_context.Car, "CarID", "CarID", booking.CarID);
-            ViewData["appUserID"] = new SelectList(_context.Users, "Id", "Id", booking.appUserID);
+            ViewData["CarID"] = new SelectList(_context.Car, "CarID", "Brand", booking.CarID);
+            ViewData["appUserID"] = new SelectList(_context.Users, "Id", "FirstName", booking.appUserID);
             return View(booking);
         }
 
@@ -102,7 +102,7 @@ namespace Farhaan.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 try
                 {
@@ -122,8 +122,8 @@ namespace Farhaan.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CarID"] = new SelectList(_context.Car, "CarID", "CarID", booking.CarID);
-            ViewData["appUserID"] = new SelectList(_context.Users, "Id", "Id", booking.appUserID);
+            ViewData["CarID"] = new SelectList(_context.Car, "CarID", "Brand", booking.CarID);
+            ViewData["appUserID"] = new SelectList(_context.Users, "Id", "FirstName", booking.appUserID);
             return View(booking);
         }
 
