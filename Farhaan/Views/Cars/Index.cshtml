@@ -1,47 +1,52 @@
 ﻿@model IEnumerable<Farhaan.Models.Car>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Cars Index";
+    var currentSort = ViewData["CurrentSortOrder"] as string;
+    var currentFilter = ViewData["CurrentFilter"] as string;
 }
 
-<h1>Index</h1>
+<h1>Cars</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<form asp-controller="Cars" asp-action="Index" method="get">
+    <p>
+        Search: <input type="text" name="searchString" value="@currentFilter" />
+        <input type="submit" value="Search" />
+    </p>
+</form>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Brand)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["BrandSortParm"]">Brand</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Year)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["YearSortParm"]">Year</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PricePerDay)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["PriceSortParm"]">Price per Day</a>
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Brand)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Year)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PricePerDay)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CarID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CarID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CarID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Brand</td>
+                <td>@item.Year</td>
+                <td>@item.PricePerDay</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.CarID">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@item.CarID">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.CarID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>

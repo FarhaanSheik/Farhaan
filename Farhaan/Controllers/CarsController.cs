@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Farhaan.Areas.Identity.Data;
 using Farhaan.Models;
+using Farhaan.Areas.Identity.Data;
 
 namespace Farhaan.Controllers
 {
@@ -20,9 +18,46 @@ namespace Farhaan.Controllers
         }
 
         // GET: Cars
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
-            return View(await _context.Car.ToListAsync());
+            ViewData["CurrentSortOrder"] = sortOrder;
+            ViewData["CurrentFilter"] = searchString;
+
+            ViewData["BrandSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Brand_desc" : "";
+            ViewData["YearSortParm"] = sortOrder == "Year" ? "Year_desc" : "Year";
+            ViewData["PriceSortParm"] = sortOrder == "Price" ? "Price_desc" : "Price";
+
+            var cars = from c in _context.Car
+                       select c;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                cars = cars.Where(c => c.Brand.Contains(searchString) || c.Year.ToString().Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "Brand_desc":
+                    cars = cars.OrderByDescending(c => c.Brand);
+                    break;
+                case "Year":
+                    cars = cars.OrderBy(c => c.Year);
+                    break;
+                case "Year_desc":
+                    cars = cars.OrderByDescending(c => c.Year);
+                    break;
+                case "Price":
+                    cars = cars.OrderBy(c => c.PricePerDay);
+                    break;
+                case "Price_desc":
+                    cars = cars.OrderByDescending(c => c.PricePerDay);
+                    break;
+                default:
+                    cars = cars.OrderBy(c => c.Brand);
+                    break;
+            }
+
+            return View(await cars.AsNoTracking().ToListAsync());
         }
 
         // GET: Cars/Details/5
@@ -50,13 +85,11 @@ namespace Farhaan.Controllers
         }
 
         // POST: Cars/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CarID,Brand,Year,PricePerDay")] Car car)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _context.Add(car);
                 await _context.SaveChangesAsync();
@@ -82,8 +115,6 @@ namespace Farhaan.Controllers
         }
 
         // POST: Cars/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CarID,Brand,Year,PricePerDay")] Car car)
@@ -93,7 +124,7 @@ namespace Farhaan.Controllers
                 return NotFound();
             }
 
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
@@ -143,9 +174,9 @@ namespace Farhaan.Controllers
             if (car != null)
             {
                 _context.Car.Remove(car);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
