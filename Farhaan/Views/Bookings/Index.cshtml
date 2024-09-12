@@ -2,64 +2,77 @@
 
 @{
     ViewData["Title"] = "Index";
+    var selectedSortOrder = ViewData["CurrentSortOrder"] as string;
 }
 
-<h1>Index</h1>
+<h1>@ViewData["Title"]</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
 </p>
+
+<form asp-action="Index" method="get" class="form-inline mb-3">
+    <div class="form-group">
+        <input type="text" name="searchString" value="@(ViewData["CurrentFilter"] as string)" placeholder="Search by name" class="form-control mr-2" />
+    </div>
+    <div class="form-group">
+        <input type="text" name="carBrand" value="@(ViewData["CurrentCarBrand"] as string)" placeholder="Search by car brand" class="form-control mr-2" />
+    </div>
+    <div class="form-group">
+        <input type="date" name="startDate" value="@(ViewData["CurrentStartDate"] as string)" class="form-control mr-2" />
+    </div>
+    <div class="form-group">
+        <input type="date" name="endDate" value="@(ViewData["CurrentEndDate"] as string)" class="form-control mr-2" />
+    </div>
+    <div class="form-group">
+        <select name="sortOrder" class="form-control mr-2">
+            <option value="">Sort by</option>
+            @{
+                var options = new[]
+                {
+                    new { Value = "Name_desc", Text = "Name Descending" },
+                    new { Value = "Date", Text = "Date Ascending" },
+                    new { Value = "Date_desc", Text = "Date Descending" }
+                };
+
+                foreach (var option in options)
+               
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Apply</button>
+</form>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Date)
+                @Html.ActionLink("Name", "Index", new { sortOrder = ViewData["NameSortParm"], searchString = ViewData["CurrentFilter"], carBrand = ViewData["CurrentCarBrand"], startDate = ViewData["CurrentStartDate"], endDate = ViewData["CurrentEndDate"] })
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Time)
+                @Html.ActionLink("Date", "Index", new { sortOrder = ViewData["DateSortParm"], searchString = ViewData["CurrentFilter"], carBrand = ViewData["CurrentCarBrand"], startDate = ViewData["CurrentStartDate"], endDate = ViewData["CurrentEndDate"] })
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Location)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.appUser)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Car)
-            </th>
+            <th>Location</th>
+            <th>Total Price</th>
+            <th>Car</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Time)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Location)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.appUser.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Car.Brand)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.BookingID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.BookingID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.BookingID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.appUser.FirstName @item.appUser.LastName</td>
+                <td>@item.Date.ToShortDateString()</td>
+                <td>@item.Location</td>
+                <td>@item.TotalPrice.ToString("C")</td>
+                <td>@item.Car.Brand</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.BookingID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.BookingID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.BookingID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

@@ -22,14 +22,18 @@ namespace Farhaan.Controllers
         // GET: Bookings
         public async Task<IActionResult> Index(string sortOrder, string searchString, string carBrand, DateTime? startDate, DateTime? endDate)
         {
-            // Set sorting parameters
+            ViewData["CurrentFilter"] = searchString;
+            ViewData["CurrentCarBrand"] = carBrand;
+            ViewData["CurrentStartDate"] = startDate.HasValue ? startDate.Value.ToString("yyyy-MM-dd") : "";
+            ViewData["CurrentEndDate"] = endDate.HasValue ? endDate.Value.ToString("yyyy-MM-dd") : "";
+            ViewData["CurrentSortOrder"] = sortOrder;
+
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Name_desc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "Date_desc" : "Date";
 
-            // Start querying bookings
             var bookings = from b in _context.Booking.Include(b => b.Car).Include(b => b.appUser)
                            select b;
-            // Apply search filter if needed
+
             if (!String.IsNullOrEmpty(searchString))
             {
                 bookings = bookings.Where(b => b.appUser.FirstName.Contains(searchString) || b.appUser.LastName.Contains(searchString));
@@ -50,7 +54,6 @@ namespace Farhaan.Controllers
                 bookings = bookings.Where(b => b.Date <= endDate.Value);
             }
 
-            // Apply sorting based on sortOrder
             switch (sortOrder)
             {
                 case "Name_desc":
@@ -65,12 +68,6 @@ namespace Farhaan.Controllers
                 default:
                     bookings = bookings.OrderBy(b => b.appUser.FirstName);
                     break;
-            }
-
-            // Apply search filter if needed
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                bookings = bookings.Where(b => b.appUser.FirstName.Contains(searchString));
             }
 
             return View(await bookings.AsNoTracking().ToListAsync());
