@@ -89,7 +89,7 @@ namespace Farhaan.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CarID,Brand,Year,PricePerDay")] Car car)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 _context.Add(car);
                 await _context.SaveChangesAsync();
@@ -124,7 +124,7 @@ namespace Farhaan.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 try
                 {
