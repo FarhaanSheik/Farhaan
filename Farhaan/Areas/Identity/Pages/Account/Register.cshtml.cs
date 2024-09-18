@@ -72,47 +72,39 @@ namespace Farhaan.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
-
-            [Required]           
+            [DataType(DataType.Text)]
+            [Required(ErrorMessage = "Please enter your first name.")]
+            [MaxLength(30, ErrorMessage = "First name cannot exceed 30 characters.")]
+            [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "First name can only contain letters.")]
             [Display(Name = "First Name")]
             public string FirstName { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Please enter your last name.")]
+            [MaxLength(30, ErrorMessage = "Last name cannot exceed 30 characters.")]
+            [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Last name can only contain letters.")]
             [Display(Name = "Last Name")]
             public string LastName { get; set; }
 
-           
             [Display(Name = "Phone Number")]
+            [Phone(ErrorMessage = "Invalid phone number format.")]
             public string PhoneNumber { get; set; }
-           
-            [Required]
+
+            [Required(ErrorMessage = "Please enter your license number.")]
             [Display(Name = "License Number")]
+            [RegularExpression(@"^[A-Za-z0-9]+$", ErrorMessage = "License number can only contain alphanumeric characters.")]
             public string LicenseNumber { get; set; }
 
-
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage = "Please enter your email address.")]
+            [EmailAddress(ErrorMessage = "Invalid email address format.")]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
-            [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Required(ErrorMessage = "Please enter a password.")]
+            [StringLength(100, ErrorMessage = "The password must be at least {2} characters long and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
 
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
