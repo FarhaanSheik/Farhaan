@@ -86,6 +86,7 @@ namespace Farhaan.Areas.Identity.Pages.Account
             public string LastName { get; set; }
 
             [Display(Name = "Phone Number")]
+            [RegularExpression(@"^\+?\d{1,3}[- ]?\(?\d{3}\)?[- ]?\d{3}[- ]?\d{4}$", ErrorMessage = "Invalid phone number format")]
             [Phone(ErrorMessage = "Invalid phone number format.")]
             public string PhoneNumber { get; set; }
 
