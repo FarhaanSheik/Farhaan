@@ -19,11 +19,11 @@ namespace Farhaan.Models
 
         // Required date for the booking
         [Required]
-        [DataType(DataType.Date)] // Specifies that this property is a date type
+        [DataType(DataType.Date)]
         public DateTime Date { get; set; }
 
         // Required time for the booking
-        [DataType(DataType.Time)] // Specifies that this property is a time type
+        [DataType(DataType.Time)] 
         [Required]
         public DateTime Time { get; set; }
 
