@@ -22,33 +22,37 @@ namespace Farhaan.Controllers
         // GET: Bookings
         public async Task<IActionResult> Index(string sortOrder, string searchString, string carBrand, DateTime? startDate, DateTime? endDate)
         {
-            ViewData["CurrentFilter"] = searchString;
-            ViewData["CurrentCarBrand"] = carBrand;
-            ViewData["CurrentStartDate"] = startDate.HasValue ? startDate.Value.ToString("yyyy-MM-dd") : "";
-            ViewData["CurrentEndDate"] = endDate.HasValue ? endDate.Value.ToString("yyyy-MM-dd") : "";
+            ViewData["CurrentFilter"] = searchString; //saves the search info for name even if you relaod the page
+            ViewData["CurrentCarBrand"] = carBrand;//saves currents search changes for the brand even after reloading the page
+            ViewData["CurrentStartDate"] = startDate.HasValue ? startDate.Value.ToString("yyyy-MM-dd") : "";//saves current search changes for the start date
+            ViewData["CurrentEndDate"] = endDate.HasValue ? endDate.Value.ToString("yyyy-MM-dd") : "";//saves current serach changes for the brand even after reloading the page
             ViewData["CurrentSortOrder"] = sortOrder;
 
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Name_desc" : "";
-            ViewData["DateSortParm"] = sortOrder == "Date" ? "Date_desc" : "Date";
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Name_desc" : "";//arranges the name in ascending and descending order when clicked
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "Date_desc" : "Date";//arranges the date in ascending and descending order when the date label is clicked
 
             var bookings = from b in _context.Booking.Include(b => b.Car).Include(b => b.appUser)
                            select b;
 
+            //Filters by name 
             if (!String.IsNullOrEmpty(searchString))
             {
                 bookings = bookings.Where(b => b.appUser.FirstName.Contains(searchString) || b.appUser.LastName.Contains(searchString));
             }
 
+            //Filters by car brand
             if (!String.IsNullOrEmpty(carBrand))
             {
                 bookings = bookings.Where(b => b.Car.Brand.Contains(carBrand));
             }
 
+            //Filters by the start date
             if (startDate.HasValue)
             {
                 bookings = bookings.Where(b => b.Date >= startDate.Value);
             }
 
+            //filters by the end date
             if (endDate.HasValue)
             {
                 bookings = bookings.Where(b => b.Date <= endDate.Value);
@@ -57,16 +61,16 @@ namespace Farhaan.Controllers
             switch (sortOrder)
             {
                 case "Name_desc":
-                    bookings = bookings.OrderByDescending(b => b.appUser.FirstName);
+                    bookings = bookings.OrderByDescending(b => b.appUser.FirstName);//sorts the username in descending order
                     break;
                 case "Date":
-                    bookings = bookings.OrderBy(b => b.Date);
+                    bookings = bookings.OrderBy(b => b.Date);//sorts the date by ascending order
                     break;
                 case "Date_desc":
-                    bookings = bookings.OrderByDescending(b => b.Date);
+                    bookings = bookings.OrderByDescending(b => b.Date);//sorts the date by descending order
                     break;
                 default:
-                    bookings = bookings.OrderBy(b => b.appUser.FirstName);
+                    bookings = bookings.OrderBy(b => b.appUser.FirstName);//this is default where the username will remain asecnding order until it is changed to descending order
                     break;
             }
 

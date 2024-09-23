@@ -23,9 +23,9 @@ namespace Farhaan.Controllers
             ViewData["CurrentSortOrder"] = sortOrder;
             ViewData["CurrentFilter"] = searchString;
 
-            ViewData["BrandSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Brand_desc" : "";
-            ViewData["YearSortParm"] = sortOrder == "Year" ? "Year_desc" : "Year";
-            ViewData["PriceSortParm"] = sortOrder == "Price" ? "Price_desc" : "Price";
+            ViewData["BrandSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Brand_desc" : "";//switches the brand sorting( ascending or descending)
+            ViewData["YearSortParm"] = sortOrder == "Year" ? "Year_desc" : "Year";//switches the year sorting (ascending or descending)
+            ViewData["PriceSortParm"] = sortOrder == "Price" ? "Price_desc" : "Price";//switches the price sorting ( ascending or descending)
 
             var cars = from c in _context.Car
                        select c;
@@ -34,26 +34,26 @@ namespace Farhaan.Controllers
             {
                 cars = cars.Where(c => c.Brand.Contains(searchString) || c.Year.ToString().Contains(searchString));
             }
-
+            // Sort the cars based on the specified sort order
             switch (sortOrder)
             {
                 case "Brand_desc":
-                    cars = cars.OrderByDescending(c => c.Brand);
+                    cars = cars.OrderByDescending(c => c.Brand); // Sort by brand in descending order
                     break;
                 case "Year":
-                    cars = cars.OrderBy(c => c.Year);
+                    cars = cars.OrderBy(c => c.Year); // Sort by year in ascending order
                     break;
                 case "Year_desc":
-                    cars = cars.OrderByDescending(c => c.Year);
+                    cars = cars.OrderByDescending(c => c.Year); // Sort by year in descending order
                     break;
                 case "Price":
-                    cars = cars.OrderBy(c => c.PricePerDay);
+                    cars = cars.OrderBy(c => c.PricePerDay); // Sort by price in ascending order
                     break;
                 case "Price_desc":
-                    cars = cars.OrderByDescending(c => c.PricePerDay);
+                    cars = cars.OrderByDescending(c => c.PricePerDay);// Sort by price in descending order
                     break;
                 default:
-                    cars = cars.OrderBy(c => c.Brand);
+                    cars = cars.OrderBy(c => c.Brand); // Default sorting by brand in ascending order
                     break;
             }
 

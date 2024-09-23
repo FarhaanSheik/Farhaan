@@ -72,6 +72,7 @@ namespace Farhaan.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
+            // First name of the user
             [DataType(DataType.Text)]
             [Required(ErrorMessage = "Please enter your first name.")]
             [MaxLength(30, ErrorMessage = "First name cannot exceed 30 characters.")]
@@ -79,33 +80,39 @@ namespace Farhaan.Areas.Identity.Pages.Account
             [Display(Name = "First Name")]
             public string FirstName { get; set; }
 
+            // Last name of the user
             [Required(ErrorMessage = "Please enter your last name.")]
             [MaxLength(30, ErrorMessage = "Last name cannot exceed 30 characters.")]
             [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Last name can only contain letters.")]
             [Display(Name = "Last Name")]
             public string LastName { get; set; }
 
+            // Phone number of the user
             [Display(Name = "Phone Number")]
             [RegularExpression(@"^\+?\d{1,3}[- ]?\(?\d{3}\)?[- ]?\d{3}[- ]?\d{4}$", ErrorMessage = "Invalid phone number format")]
             [Phone(ErrorMessage = "Invalid phone number format.")]
             public string PhoneNumber { get; set; }
 
+            // License number of the user
             [Required(ErrorMessage = "Please enter your license number.")]
             [Display(Name = "License Number")]
             [RegularExpression(@"^[A-Za-z0-9]+$", ErrorMessage = "License number can only contain alphanumeric characters.")]
             public string LicenseNumber { get; set; }
 
+            // Email address of the user
             [Required(ErrorMessage = "Please enter your email address.")]
             [EmailAddress(ErrorMessage = "Invalid email address format.")]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
+            // Password for user authentication
             [Required(ErrorMessage = "Please enter a password.")]
             [StringLength(100, ErrorMessage = "The password must be at least {2} characters long and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
 
+            // Confirmation of the password
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
