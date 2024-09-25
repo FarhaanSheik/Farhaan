@@ -14,7 +14,7 @@ namespace Farhaan.Models
         public string Brand { get; set; }
 
         // Year the car was manufactured
-        [Range(2023, 2100)] // Range between when the car can be booked
+        [Range(1870, 2100)] // Range between when the car can be booked
         public int Year { get; set; }
 
         // Price per day for renting the car

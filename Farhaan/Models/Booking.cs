@@ -3,6 +3,7 @@ using Farhaan.Controllers;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using YourNamespace;
 namespace Farhaan.Models
 {
     public class Booking
@@ -20,10 +21,11 @@ namespace Farhaan.Models
         // Required date for the booking
         [Required]
         [DataType(DataType.Date)]
+        [FutureDate] // Applying the custom validation attribute
         public DateTime Date { get; set; }
 
         // Required time for the booking
-        [DataType(DataType.Time)] 
+        [DataType(DataType.Time)]
         [Required]
         public DateTime Time { get; set; }
 
